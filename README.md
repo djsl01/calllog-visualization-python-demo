@@ -28,4 +28,4 @@ Remember to add your app client id and client secret as well as account login cr
 Open your Web browser and enter localhost:5000
 
 ## RingCentral Python SDK
-The SDK is available at https://github.com/ringcentral/python
+The SDK is available at https://github.com/ringcentral/ringcentral-python
