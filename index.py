@@ -8,8 +8,6 @@ from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 platform = None
-# if __name__ == "__main__":
-#     app.run()
 
 @app.route('/')
 @app.route('/index')
@@ -18,35 +16,42 @@ def index():
 
 @app.route('/readlog', methods=['GET'])
 def login():
-    print("logging in...")
-    access = request.args.get('access', "account")
-    params = request.args.get('params', "default")
     global platform
     if os.environ.get("ENVIRONMENT_MODE") == "sandbox":
-        sdk = SDK(os.environ.get("CLIENT_ID_SB"), os.environ.get("CLIENT_SECRET_SB"), 'https://platform.devtest.ringcentral.com')
-        platform = sdk.platform()
-        platform.login(os.environ.get("USERNAME_SB"), '', os.environ.get("PASSWORD_SB"))
+        rcsdk = SDK(os.environ.get("CLIENT_ID_SB"), os.environ.get("CLIENT_SECRET_SB"), 'https://platform.devtest.ringcentral.com')
+        username = os.environ.get("USERNAME_SB")
+        pwd = os.environ.get("PASSWORD_SB")
     else:
-        sdk = SDK(os.environ.get("CLIENT_ID_PROD"), os.environ.get("CLIENT_SECRET_PROD"), 'https://platform.ringcentral.com')
-        platform = sdk.platform()
-        platform.login(os.environ.get("USERNAME_PROD"), '', os.environ.get("PASSWORD_PROD"))
-    res = readCallLogs(access, params)
-    return json.dumps(res)
+        rcsdk = SDK(os.environ.get("CLIENT_ID_PROD"), os.environ.get("CLIENT_SECRET_PROD"), 'https://platform.ringcentral.com')
+        username = os.environ.get("USERNAME_PROD")
+        pwd = os.environ.get("PASSWORD_PROD")
+    platform = rcsdk.platform()
+    
+    try:
+        platform.login(username, '', pwd)
+        res = readCallLogs()
+        return json.dumps(res)
+    except Exception as e:
+        errorRes = {"calllog_error":"Cannot login."}
+        return errorRes
 
-
-def readCallLogs(access, params) :
+def readCallLogs() :
     global platform
-    configs = json.loads(params)
-    endpoint = "";
+    access = request.args.get('access', "account")
+    endpoint = "/account/~/extension/~/call-log";
     if access == "account":
-        endpoint = '/account/~/call-log';
-    else:
-        endpoint = '/account/~/extension/~/call-log';
+        endpoint = "/account/~/call-log";
 
     try:
-        response = platform.get(endpoint, configs)
-        jsonObj = json.loads(response.response()._content)
-        return jsonObj['records']
+        params = request.args.get('params', None)
+        if params != None:
+            configs = json.loads(params)
+            response = platform.get(endpoint, configs)
+            jsonObj = json.loads(response.response()._content)
+            return jsonObj['records']
+        else:
+            errorRes = {"calllog_error":"Mising query parameters"}
+            return errorRes
     except Exception as e:
         error = str(e)
         if error.find("ReadCompanyCallLog") != -1:
