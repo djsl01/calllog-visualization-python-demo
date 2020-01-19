@@ -1,13 +1,13 @@
 ENVIRONMENT_MODE=sandbox
-CLIENT_ID_SB=YourSandboxClienId
-CLIENT_SECRET_SB=YourSandboxClienSecret
+CLIENT_ID_SB=sW285tHfSFeKq9qV8fwDrQ
+CLIENT_SECRET_SB=gQdAMrM0RYG79Ji3UKvoyg3XwPabQYTE6bsr5Jr5KC6w
 
-USERNAME_SB=YourSandboxUsername
-PASSWORD_SB=YourSandboxPassword
+USERNAME_SB=Jim@ecotechpestconrol.com
+PASSWORD_SB=6271!Howard
 EXTENSION=
 
-CLIENT_ID_PROD=YourProductionClientId
-CLIENT_SECRET_PROD=YourProductionClientSecret
+CLIENT_ID_PROD=sW285tHfSFeKq9qV8fwDrQ
+CLIENT_SECRET_PROD=gQdAMrM0RYG79Ji3UKvoyg3XwPabQYTE6bsr5Jr5KC6w
 
-USERNAME_PROD=YourProductionUsername
-PASSWORD_PROD=YourProductionPassword
+USERNAME_PROD=Jim@ecotechpestconrol.com
+PASSWORD_PROD=6271!Howard
